@@ -1,0 +1,499 @@
+R version 4.6.2 (2026-10-29 ucrt) -- "Diversified Portfolio"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> #On the 10x Genomics Datasets Portal, files are nested inside individual project pages rather than being displayed on one giant download page.
+> Here is exactly how to navigate to the download files step-by-step:
+Error: unexpected symbol in "Here is"
+
+> # Install Seurat and HDF5 reader packages if you don't have them
+> install.packages("Seurat")
+WARNING: Rtools is required to build R packages but is not currently installed. Please download and install the appropriate version of Rtools before proceeding:
+
+https://cran.rstudio.com/bin/windows/Rtools/
+Installing package into ‘C:/Users/koyilomn/AppData/Local/R/win-library/4.6’
+(as ‘lib’ is unspecified)
+also installing the dependencies ‘rlang’, ‘RSpectra’, ‘Rtsne’, ‘scales’, ‘scattermore’, ‘sctransform’, ‘uwot’, ‘RcppEigen’, ‘RcppProgress’, ‘RcppThread’
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.6/rlang_1.3.0.zip'
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.6/RSpectra_0.16-2.zip'
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.6/Rtsne_0.17.zip'
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.6/scales_1.4.0.zip'
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.6/scattermore_1.2.zip'
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.6/sctransform_0.4.3.zip'
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.6/uwot_0.2.5.zip'
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.6/RcppEigen_0.3.4.0.2.zip'
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.6/RcppProgress_0.4.2.zip'
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.6/RcppThread_2.4.0.zip'
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.6/Seurat_6.0.0.zip'
+package ‘rlang’ successfully unpacked and MD5 sums checked
+package ‘RSpectra’ successfully unpacked and MD5 sums checked
+package ‘Rtsne’ successfully unpacked and MD5 sums checked
+package ‘scales’ successfully unpacked and MD5 sums checked
+package ‘scattermore’ successfully unpacked and MD5 sums checked
+package ‘sctransform’ successfully unpacked and MD5 sums checked
+package ‘uwot’ successfully unpacked and MD5 sums checked
+package ‘RcppEigen’ successfully unpacked and MD5 sums checked
+package ‘RcppProgress’ successfully unpacked and MD5 sums checked
+package ‘RcppThread’ successfully unpacked and MD5 sums checked
+package ‘Seurat’ successfully unpacked and MD5 sums checked
+
+The downloaded binary packages are in
+	C:\Users\koyilomn\AppData\Local\Temp\RtmpALyaF9\downloaded_packages
+> install.packages("hdf5r") # Required to read .h5 files
+WARNING: Rtools is required to build R packages but is not currently installed. Please download and install the appropriate version of Rtools before proceeding:
+
+https://cran.rstudio.com/bin/windows/Rtools/
+Installing package into ‘C:/Users/koyilomn/AppData/Local/R/win-library/4.6’
+(as ‘lib’ is unspecified)
+also installing the dependencies ‘bit’, ‘bit64’
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.6/bit_4.6.0.zip'
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.6/bit64_4.8.6.zip'
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.6/hdf5r_1.3.16.zip'
+package ‘bit’ successfully unpacked and MD5 sums checked
+package ‘bit64’ successfully unpacked and MD5 sums checked
+package ‘hdf5r’ successfully unpacked and MD5 sums checked
+
+The downloaded binary packages are in
+	C:\Users\koyilomn\AppData\Local\Temp\RtmpALyaF9\downloaded_packages
+> 
+> # Load the libraries
+> library(Seurat)
+Loading required package: SeuratObject
+Loading required package: sp
+‘SeuratObject’ was built under R 4.6.1 but the current version is 4.6.2; it is recomended that you
+reinstall ‘SeuratObject’ as the ABI for R may have changed
+
+Attaching package: ‘SeuratObject’
+
+The following objects are masked from ‘package:base’:
+
+    intersect, t
+
+v6.0 adds significant improvements in speed and efficiency, particularly for large datasets.
+For more information, see https://satijalab.org/seurat/articles/announcements.
+> library(dplyr)
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+> library(ggplot2)
+> # 1. Read the H5 matrix file
+> counts_matrix <- Read10X_h5("sample_feature_bc_matrix.h5")
+Error in Read10X_h5("sample_feature_bc_matrix.h5") : File not found
+
+> # 1. Read the H5 matrix file
+> counts_matrix <- Read10X_h5("sample_feature_bc_matrix.h5")
+Error in Read10X_h5("sample_feature_bc_matrix.h5") : File not found
+
+> setwd("~/")
+> 
+> # 1. Read the H5 matrix file
+> counts_matrix <- Read10X_h5("sample_feature_bc_matrix.h5")
+> 
+> # 2. Create a Seurat Object
+> # We filter out very poor cells right at the start (cells must have at least 200 genes)
+> seurat_obj <- CreateSeuratObject(counts = counts_matrix, 
++                                  project = "scRNA_Practice", 
++                                  min.cells = 3, 
++                                  min.features = 200)
+> 
+> # Look at your initial object summary
+> print(seurat_obj)
+An object of class Seurat 
+25348 features across 5697 samples within 1 assay 
+Active assay: RNA (25348 features, 0 variable features)
+ 1 layer present: counts
+> 
+> #Step 3 Quality control and filtering
+> # 1. Calculate mitochondrial gene percentage (starts with "MT-" in humans)
+> seurat_obj[["percent.mt"]] <- PercentageFeatureSet(seurat_obj, pattern = "^MT-")
+> 
+> # 2. Visualize QC metrics before filtering
+> VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+Warning: Default search for "data" layer in "RNA" assay yielded no results; utilizing "counts" layer instead.
+> 
+> # 3. Filter out bad cells (adjust thresholds based on your violin plot)
+> # Standard practice: Remove cells with >5% mitochondrial genes or extreme gene counts
+> seurat_obj <- subset(seurat_obj, subset = nFeature_RNA > 200 & 
++                          nFeature_RNA < 2500 & 
++                          percent.mt < 5)
+> 
+> #Step 4: Normalization and Finding Variable Feature
+> # 1. Normalize the data (LogNormalize scales data to 10,000 reads per cell)
+> seurat_obj <- NormalizeData(seurat_obj, normalization.method = "LogNormalize", scale.factor = 10000)
+Normalizing layer: counts
+Performing log-normalization
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+> 
+> # 2. Identify highly variable genes (usually top 2000)
+> seurat_obj <- FindVariableFeatures(seurat_obj, selection.method = "vst", nfeatures = 2000)
+Finding variable features for layer counts
+Calculating gene means and variances
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+> 
+> # Plot top 10 most variable genes just to look at them
+> top10 <- head(VariableFeatures(seurat_obj), 10)
+> LabelPoints(plot = VariableFeaturePlot(seurat_obj), points = top10, repel = TRUE)
+When using repel, set xnudge and ynudge to 0 for optimal results
+Warning message:
+In scale_x_log10() :
+  log-10 transformation introduced infinite values.
+> 
+> #Step 5: caling the Data and Dimensionality Reduction
+> # 1. Scale the data
+> all.genes <- rownames(seurat_obj)
+> seurat_obj <- ScaleData(seurat_obj, features = all.genes)
+Centering and scaling data matrix
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+> 
+> # 2. Run PCA
+> seurat_obj <- RunPCA(seurat_obj, features = VariableFeatures(object = seurat_obj))
+PC_ 1 
+Positive:  TUBB1, MYL9, PF4, CAVIN2, GP1BB, GNG11, NRGN, CTDSPL, F13A1, PPBP 
+	   ITGB3, CLDN5, RGS18, MYLK, C2orf88, GP9, SPARC, PRKAR2B, CLU, SMANTIS 
+	   ENSG00000291236, LGALSL, ITGA2B, ELOVL7, CTTN, ACRBP, GFI1B, STON2, MPIG6B, TMEM40 
+Negative:  RPS6, BACH2, DENND4A, RPL14, RPL13, RPS18, RPL34, H1-3, EEF1A1, RPS3A 
+	   RPL32, ZEB1, RPL19, NFKB1, RPL23A, PDE3B, RPL12, RPS23, RPL9, RPS8 
+	   RPS25, RPL30, STAT4, RPL18, HIVEP2, CD247, RPS27A, UTRN, RPL3, RPS27 
+PC_ 2 
+Positive:  CMIP, FNDC3B, DOCK5, ZFAND3, ARHGAP26, NEAT1, GNG2, RAPGEF1, ABHD2, ZEB2 
+	   MCTP2, STK10, CHST11, TGFBR3, SYTL3, RUNX1, AOAH, ATXN1, EPG5, PITPNC1 
+	   MYO1F, SLCO3A1, SMAD3, AUTS2, PLCB1, NCOA1, PTK2B, IGF2R, RIN3, CTBP2 
+Negative:  RPL11, RPL18, RPL18A, RPL9, RPS4X, RPS23, RPL32, RPL13A, RPLP1, RPS8 
+	   RPS2, RPS12, RPL21, RPL19, RPL8, RPS13, RPL10, RPS3A, RPL10A, RPS21 
+	   RPL14, RPSA, RPS28, RPS27, RPL41, RPL3, RPS25, RPS15, RPS26, RPL12 
+PC_ 3 
+Positive:  CD247, RORA, STAT4, PDE3B, IQGAP2, SYNE2, CAMK4, TNIK, TGFBR3, TC2N 
+	   GRAP2, SYTL3, CD96, PRKCA, LEF1, NIBAN1, PAG1, INPP4B, SYTL2, UTRN 
+	   BICDL1, THEMIS, SYNE1, RASA3, PLCL1, LRRC8C, ABLIM1, ABTB3, PYHIN1, MLLT3 
+Negative:  CHST15, KYNU, CDK14, RBM47, PPARG, BASP1, MEF2C, DOCK4, PID1, HCK 
+	   TREM1, ANPEP, ADAM28, TLR2, MAP3K20, PAPSS2, PFKFB4, MAFB, ABCA1, CYRIA 
+	   SULF2, SEMA6B, PLAUR, SLC11A1, SYK, SRGAP1, ALOX5, RNF152, WDFY4, PLXDC2 
+PC_ 4 
+Positive:  LYN, CD83, BANK1, MS4A1, ZBTB16, CD79A, MTSS1, COBLL1, LINC00926, GSAP 
+	   IGKC, CD74, AFF3, PAX5, BLK, IGHD, HLA-DPA1, HLA-DRB1, SETBP1, HLA-DRA 
+	   HLA-DQB1, IGHM, RALGPS2, TNFRSF13C, PLEKHG1, CD22, HLA-DMB, ABCB1, EBF1, COL19A1 
+Negative:  SERINC5, CAMK4, LEF1, FKBP5, DOCK4, RBM47, PLAUR, PPARG, IL6R, PRKCA 
+	   INPP4B, TREM1, ANPEP, SRGAP1, SULF2, PID1, SLC16A10, MAML2, MAFB, PLCL1 
+	   PFKFB4, PDE3B, EPB41L3, ADGRE2, TLR2, RNF152, EEPD1, PAPSS2, SEMA6B, SLC11A1 
+PC_ 5 
+Positive:  ZEB1, ST6GAL1, MGAT5, CMSS1, STRBP, PALM2AKAP2, TPD52, LDLRAD4, SESN3, ADAM19 
+	   PLEKHG1, AFF3, BANK1, BLK, PAX5, ARHGAP25, PAG1, RALGPS2, SERINC5, CSGALNACT1 
+	   MARCHF1, PLCL1, BACH2, PKIA, RASSF3, MS4A1, TSHZ2, TRAK1, EBF1, SLC9A7 
+Negative:  B2M, TYROBP, GNLY, NKG7, GZMB, HSPA5, KLRK1, TMSB4X, ZEB2, AOAH 
+	   ACTG1, S100A6, RPL35A, H3-3B, RPL41, KLRD1, RPL7, EFHD2, RPS27A, IL18RAP 
+	   KLRF1, BHLHE40, FTL, SLAMF7, GZMA, HLA-E, RPS3, DOCK5, RPS14, MCTP2 
+> 
+> # 3. Visualize PCA results
+> DimPlot(seurat_obj, reduction = "pca")
+> ElbowPlot(seurat_obj) # Helps you decide how many PCs to use (where the curve flattens)
+> 
+> # 1. Grab the standard deviations from your Seurat PCA slot
+> stdevs <- seurat_obj[["pca"]]@stdev
+> 
+> # 2. Square them to get the variance, then calculate the coverage percentage
+> pc_coverage <- (stdevs^2 / sum(stdevs^2)) * 100
+> 
+> # 3. Create a clean breakdown table
+> data_coverage_table <- data.frame(
++     PC = paste0("PC-", 1:length(pc_coverage)),
++     Data_Covered_Percent = round(pc_coverage, 2),
++     Total_Cumulative_Covered = round(cumsum(pc_coverage), 2)
++ )
+> 
+> # 4. Print the table to your console
+> print(data_coverage_table)
+      PC Data_Covered_Percent Total_Cumulative_Covered
+1   PC-1                16.21                    16.21
+2   PC-2                11.16                    27.38
+3   PC-3                 8.37                    35.75
+4   PC-4                 6.24                    41.99
+5   PC-5                 5.20                    47.19
+6   PC-6                 2.73                    49.92
+7   PC-7                 2.22                    52.14
+8   PC-8                 2.03                    54.17
+9   PC-9                 1.97                    56.14
+10 PC-10                 1.60                    57.75
+11 PC-11                 1.53                    59.28
+12 PC-12                 1.48                    60.76
+13 PC-13                 1.43                    62.19
+14 PC-14                 1.42                    63.61
+15 PC-15                 1.36                    64.97
+16 PC-16                 1.34                    66.31
+17 PC-17                 1.27                    67.58
+18 PC-18                 1.24                    68.82
+19 PC-19                 1.20                    70.02
+20 PC-20                 1.18                    71.20
+21 PC-21                 1.15                    72.35
+22 PC-22                 1.13                    73.48
+23 PC-23                 1.12                    74.60
+24 PC-24                 1.10                    75.70
+25 PC-25                 1.09                    76.78
+26 PC-26                 1.05                    77.84
+27 PC-27                 1.04                    78.88
+28 PC-28                 1.02                    79.91
+29 PC-29                 1.01                    80.92
+30 PC-30                 1.00                    81.92
+31 PC-31                 1.00                    82.91
+32 PC-32                 0.98                    83.89
+33 PC-33                 0.97                    84.86
+34 PC-34                 0.96                    85.81
+35 PC-35                 0.95                    86.77
+36 PC-36                 0.94                    87.70
+37 PC-37                 0.93                    88.63
+38 PC-38                 0.92                    89.56
+39 PC-39                 0.91                    90.46
+40 PC-40                 0.90                    91.36
+41 PC-41                 0.90                    92.26
+42 PC-42                 0.88                    93.14
+43 PC-43                 0.88                    94.02
+44 PC-44                 0.88                    94.90
+45 PC-45                 0.87                    95.77
+46 PC-46                 0.86                    96.63
+47 PC-47                 0.86                    97.48
+48 PC-48                 0.84                    98.33
+49 PC-49                 0.84                    99.17
+50 PC-50                 0.83                   100.00
+> 
+> library(ggplot2)
+> 
+> # 1. Ensure you have calculated the coverage array from the previous step
+> stdevs <- seurat_obj[["pca"]]@stdev
+> pc_coverage <- (stdevs^2 / sum(stdevs^2)) * 100
+> data_coverage_table <- data.frame(
++     PC = factor(paste0("PC-", 1:length(pc_coverage)), levels = paste0("PC-", 1:length(pc_coverage))),
++     Data_Covered_Percent = pc_coverage
++ )
+> 
+> # 2. Build the ggplot bar graph (looking at the top 20 PCs)
+> coverage_barplot <- ggplot(data_coverage_table[1:20, ], aes(x = PC, y = Data_Covered_Percent)) +
++     geom_bar(stat = "identity", fill = "skyblue", color = "black") +
++     geom_text(aes(label = paste0(round(Data_Covered_Percent, 1), "%")), vjust = -0.5, size = 3) +
++     theme_classic() +
++     labs(
++         title = "Data Coverage per Principal Component",
++         x = "Principal Components",
++         y = "Percentage of Total Data Covered (%)"
++     ) +
++     theme(axis.text.x = element_text(angle = 45, hjust = 1))
+> 
+> # 3. View the plot in RStudio
+> print(coverage_barplot)
+> 
+> # 4. Save/Download the bar graph to your folder
+> ggsave(filename = "PCA_Data_Coverage_BarGraph.png", plot = coverage_barplot, width = 8, height = 5, dpi = 300)
+> 
+> # 1. Generate the standard Seurat PCA plot and save it to a variable
+> my_pca_plot <- DimPlot(seurat_obj, reduction = "pca")
+> 
+> # 2. View the plot in RStudio
+> print(my_pca_plot)
+> 
+> # 3. Save/Download the PCA plot to your folder
+> ggsave(filename = "Seurat_PCA_DimPlot.png", plot = my_pca_plot, width = 7, height = 6, dpi = 300)
+> 
+> #Step 6: Clustering Cells
+> #Based on the PCA dimensions (we will use the first 10 PCs here), Seurat groups cells with similar expression patterns into distinct clusters.
+> # 1. Find neighboring cells
+> seurat_obj <- FindNeighbors(seurat_obj, dims = 1:10)
+Computing nearest neighbor graph
+Computing SNN
+> 
+> # 2. Cluster cells (Resolution around 0.5-0.8 is standard for blood/immune datasets)
+> seurat_obj <- FindClusters(seurat_obj, resolution = 0.5)
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 311
+Number of edges: 7253
+
+Running Louvain algorithm...
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Maximum modularity in 10 random starts: 0.8305
+Number of communities: 5
+Elapsed time: 0 seconds
+> 
+> # View active cluster assignments for the first few cells
+> head(Idents(seurat_obj), 5)
+AAACCCTGTGACGAGT-1 AAACGATGTTAGCCCA-1 AAATGGGCAGGACACC-1 AAATTGCTCTATCGAG-1 AACACATTCTATGAAC-1 
+                 0                  0                  3                  2                  0 
+Levels: 0 1 2 3 4
+> 
+> #Step 7: Visualization (UMAP/t-SNE)
+> #To see your clusters in 2D space, you generate a UMAP plot. Cells that are close together are biologically similar.
+> # 1. Run UMAP
+> seurat_obj <- RunUMAP(seurat_obj, dims = 1:10)
+16:05:59 UMAP embedding parameters a = 0.9922 b = 1.112
+16:05:59 Read 311 rows and found 10 numeric columns
+16:05:59 Using Annoy for neighbor search, n_neighbors = 30
+16:05:59 Building Annoy index with metric = cosine, n_trees = 50
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+16:05:59 Writing NN index file to temp file C:\Users\koyilomn\AppData\Local\Temp\RtmpALyaF9\file56c0316240df
+16:05:59 Searching Annoy index using 1 thread, search_k = 3000
+16:05:59 Annoy recall = 100%
+16:05:59 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30
+16:05:59 Initializing from normalized Laplacian + noise (using RSpectra)
+16:05:59 Commencing optimization for 500 epochs, with 10678 positive edges
+16:05:59 Using rng type: pcg
+Using method 'umap'
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+16:06:00 Optimization finished
+> 
+> # 2. Plot the results
+> DimPlot(seurat_obj, reduction = "umap", label = TRUE)
+> 
+> # 1. Check your current cluster numbers to see how many you have
+> print(levels(seurat_obj))
+[1] "0" "1" "2" "3" "4"
+> 
+> # 2. Define the cell names matching your cluster order (0, 1, 2, 3...)
+> # NOTE: Replace these names with the actual cell types you find in your marker analysis!
+> # This example maps 5 standard clusters for a PBMC dataset:
+> cell_names <- c("0" = "CD4+ T-Cells", 
++                 "1" = "B-Cells", 
++                 "2" = "CD8+ T-Cells", 
++                 "3" = "NK Cells", 
++                 "4" = "Monocytes")
+> 
+> # 3. Rename the clusters in your Seurat object
+> seurat_obj <- RenameIdents(seurat_obj, cell_names)
+> 
+> # 4. Run UMAP (if you haven't run it yet)
+> seurat_obj <- RunUMAP(seurat_obj, dims = 1:10)
+16:07:36 UMAP embedding parameters a = 0.9922 b = 1.112
+16:07:36 Read 311 rows and found 10 numeric columns
+16:07:36 Using Annoy for neighbor search, n_neighbors = 30
+16:07:36 Building Annoy index with metric = cosine, n_trees = 50
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+16:07:36 Writing NN index file to temp file C:\Users\koyilomn\AppData\Local\Temp\RtmpALyaF9\file56c011b739f4
+16:07:36 Searching Annoy index using 1 thread, search_k = 3000
+16:07:36 Annoy recall = 100%
+16:07:37 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30
+16:07:37 Initializing from normalized Laplacian + noise (using RSpectra)
+16:07:37 Commencing optimization for 500 epochs, with 10678 positive edges
+16:07:37 Using rng type: pcg
+Using method 'umap'
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+16:07:38 Optimization finished
+> 
+> # 5. Plot the results with larger dots
+> # pt.size changes the dot size (default is usually ~0.5 or 1, increasing to 1.5 makes them bigger)
+> DimPlot(seurat_obj, reduction = "umap", label = TRUE, pt.size = 1.5) + 
++     theme(legend.text = element_text(size = 12)) # Optional: makes the legend font easy to read
+> 
+> #Step 8
+> # 1. Find markers for all clusters compared to all other cells
+> cluster_markers <- FindAllMarkers(seurat_obj, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+Calculating cluster CD4+ T-Cells
+For a (much!) faster implementation of the Wilcoxon Rank Sum Test,
+(default method for FindMarkers) please install the presto package
+--------------------------------------------
+install.packages('devtools')
+devtools::install_github('immunogenomics/presto')
+--------------------------------------------
+After installation of presto, Seurat will automatically use the more 
+efficient implementation (no further action necessary).
+This message will be shown once per session
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=02s  
+Calculating cluster B-Cells
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=01s  
+Calculating cluster CD8+ T-Cells
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=01s  
+Calculating cluster NK Cells
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=01s  
+Calculating cluster Monocytes
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=01s  
+> 
+> # 2. View the top 2 marker genes for each cluster
+> cluster_markers %>% group_by(cluster) %>% slice_max(n = 2, order_by = avg_log2FC)
+# A tibble: 10 × 7
+# Groups:   cluster [5]
+      p_val avg_log2FC pct.1 pct.2 p_val_adj cluster      gene     
+      <dbl>      <dbl> <dbl> <dbl>     <dbl> <fct>        <chr>    
+ 1 5.36e- 9       3.37 0.277 0.051  1.36e- 4 CD4+ T-Cells CDHR3    
+ 2 2.22e-16       3.06 0.66  0.258  5.63e-12 CD4+ T-Cells PLCL1    
+ 3 4.88e-13       4.85 0.315 0.034  1.24e- 8 B-Cells      CD8A     
+ 4 3.81e- 6       4.60 0.411 0.172  9.65e- 2 B-Cells      NCOA4    
+ 5 8.04e-14       3.47 0.343 0.033  2.04e- 9 CD8+ T-Cells CHRM3-AS2
+ 6 1.42e-12       3.39 0.328 0.037  3.61e- 8 CD8+ T-Cells EPHB6    
+ 7 0             10.7  0.41  0      0        NK Cells     LINGO2   
+ 8 0             10.2  0.462 0      0        NK Cells     NCAM1    
+ 9 0             11.5  0.816 0      0        Monocytes    IGHM     
+10 0             10.7  0.763 0      0        Monocytes    IGHD     
+> 
+> # 3. Plot a specific gene of interest to see where it is expressed
+> # (e.g., MS4A1 is a classic B-cell marker, CD3E is a T-cell marker)
+> FeaturePlot(seurat_obj, features = c("MS4A1", "CD3E"))
+> 
+> #Step 9
+> # STEP 2: View the top 2 marker genes for each named cell type
+> # ==============================================================================
+> # The printed table will show the cell names instead of numerical cluster IDs
+> named_top_markers <- cluster_markers %>% 
++     group_by(cluster) %>% 
++     slice_max(n = 2, order_by = avg_log2FC)
+> 
+> print(named_top_markers)
+# A tibble: 10 × 7
+# Groups:   cluster [5]
+      p_val avg_log2FC pct.1 pct.2 p_val_adj cluster      gene     
+      <dbl>      <dbl> <dbl> <dbl>     <dbl> <fct>        <chr>    
+ 1 5.36e- 9       3.37 0.277 0.051  1.36e- 4 CD4+ T-Cells CDHR3    
+ 2 2.22e-16       3.06 0.66  0.258  5.63e-12 CD4+ T-Cells PLCL1    
+ 3 4.88e-13       4.85 0.315 0.034  1.24e- 8 B-Cells      CD8A     
+ 4 3.81e- 6       4.60 0.411 0.172  9.65e- 2 B-Cells      NCOA4    
+ 5 8.04e-14       3.47 0.343 0.033  2.04e- 9 CD8+ T-Cells CHRM3-AS2
+ 6 1.42e-12       3.39 0.328 0.037  3.61e- 8 CD8+ T-Cells EPHB6    
+ 7 0             10.7  0.41  0      0        NK Cells     LINGO2   
+ 8 0             10.2  0.462 0      0        NK Cells     NCAM1    
+ 9 0             11.5  0.816 0      0        Monocytes    IGHM     
+10 0             10.7  0.763 0      0        Monocytes    IGHD     
+> 
+> #Step 10
+> # STEP 3: Plot expression profiles across your named cell groups
+> # ==============================================================================
+> # FeaturePlot draws individual panels per gene. If you want a view grouped by 
+> # your cell names, VlnPlot (Violin Plot) is highly recommended for marker genes.
+> FeaturePlot(seurat_obj, features = c("MS4A1", "CD3E"))
+> 
+> # Alternative recommendation: A violin plot to compare expression levels 
+> # directly across your newly named cell types with larger points
+> VlnPlot(seurat_obj, features = c("MS4A1", "CD3E"), pt.size = 0.5)
